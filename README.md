@@ -1,2 +1,3 @@
 # MineSweeper
-## version 1.0i
+## version 2.00
+### Split class

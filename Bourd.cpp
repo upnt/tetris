@@ -4,11 +4,34 @@
 
 using namespace std;
 
+//conversion
+int Bourd::toVecId(int width, int height){
+	return (this -> width + 1) * height + width;
+}
+
+//WidthHeight -> Width, Height
+void Bourd::toWidthAndHeight(int place, int *width, int *height){
+	*height = place % 10;
+	*width = place / 10;
+}
+
+
+
+
+
+
+
+
+
+//constract
 Bourd::Bourd(int numMine, int width, int height) 
-	: clear(false), numMine(numMine), width(width - 1), height(height - 1){
+		: clear(false), numMine(numMine), width(width - 1), height(height - 1){
+
 	vecInit(toVecId(width, height));
 
 }
+
+
 
 void Bourd::vecInit(int vecId){
 	panels.erase(panels.begin(), panels.end());
@@ -20,37 +43,7 @@ void Bourd::vecInit(int vecId){
 	}
 }
 
-int Bourd::toVecId(int width, int height){
-	return (this -> width + 1) * height + width;
-}
 
-void Bourd::open(int width, int height, bool playing){
-	int vecId = toVecId(width, height);
-	if((0 <= vecId) &&( vecId <= toVecId(this -> width, this -> height))){
-		if(panels[vecId].get() -> getBeMine()){
-			clear = true;
-			playing = false;
-		}
-
-			panels[vecId].get() -> open();
-		}
-}
-
-void Bourd::sqrOpen(int width, int height, bool playing){
-	open(width - 1, height - 1, playing);
-	open(width - 1, height	  , playing);
-	open(width - 1, height + 1, playing);
-	open(width	  , height - 1, playing);
-	open(width	  , height	  , playing);
-	open(width	  , height + 1, playing);
-	open(width + 1, height - 1, playing);
-	open(width + 1, height	  , playing);
-	open(width + 1, height + 1, playing);
-}
-
-bool Bourd::getClear(){
-	return clear;
-}
 
 void Bourd::putMine(int preWidth, int preHeight){
 
@@ -80,6 +73,69 @@ void Bourd::putMine(int preWidth, int preHeight){
 	
 }
 
+void Bourd::putMine(int place){
+	int preWidth, preHeight;
+	toWidthAndHeight(place, &preWidth, &preHeight);
+
+	putMine(preWidth, preHeight);
+}
+
+
+
+
+
+//interface
+bool Bourd::isClear(){
+	return clear;
+}
+
+
+
+void Bourd::open(int width, int height, bool playing){
+	int vecId = toVecId(width, height);
+	if((0 <= vecId) &&( vecId <= toVecId(this -> width, this -> height))){
+		if(panels[vecId].get() -> getBeMine()){
+			clear = true;
+			playing = false;
+		}
+
+			panels[vecId].get() -> open();
+	}
+}
+
+void Bourd::open(int place, bool playing){
+	int width, height;
+	toWidthAndHeight(place, &width, &height);
+
+	open(width, height, playing);
+}
+
+
+
+void Bourd::show(){
+	system("reset");
+	cout << "  ";
+	for(int i = 0; i <= width; i++)
+		cout << ' ' << i;
+
+	int j = 0;
+	for(int i = 0; i <= toVecId(width, height) ; i++){
+		if(i % (width + 1) == 0){
+			cout << endl;
+			cout << ' ' << j;
+			j++;
+		}
+		cout << ' ' << (panels[i].get() -> getNumMineAround());
+	}
+	cout << endl;
+}
+
+
+
+
+
+
+//process
 void Bourd::addNumMineAround(int width, int height){
 	if((0 <= width)	&& (width <= this -> width)){
 		if((0 <= height) && (height <= this -> height))
@@ -100,21 +156,14 @@ void Bourd::calNumMineAround(int width, int height){
 		
 }
 
-void Bourd::show(){
-	system("reset");
-	cout << "  ";
-	for(int i = 0; i <= width; i++)
-		cout << ' ' << i;
-
-	int j = 0;
-	for(int i = 0; i <= toVecId(width, height) ; i++){
-		if(i % (width + 1) == 0){
-			cout << endl;
-			cout << ' ' << j;
-			j++;
-		}
-		cout << ' ' << (panels[i].get() -> getNumMineAround());
-	}
-	cout << endl;
+void Bourd::sqrOpen(int width, int height, bool playing){
+	open(width - 1, height - 1, playing);
+	open(width - 1, height	  , playing);
+	open(width - 1, height + 1, playing);
+	open(width	  , height - 1, playing);
+	open(width	  , height	  , playing);
+	open(width	  , height + 1, playing);
+	open(width + 1, height - 1, playing);
+	open(width + 1, height	  , playing);
+	open(width + 1, height + 1, playing);
 }
-			

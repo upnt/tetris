@@ -1,72 +1,56 @@
 #include"Bourd.hpp"
 #include"GameMode.hpp"
 
-GameMode toGameMode(int);
-void toWidthAndHeight(int, int*, int*);
-
 int main(){
 	Bourd* bourd;
-	int width, height, numMine;
 	int place;
 	int buf;
-	GameMode gameMode = END;
+	GameMode gameMode = GameMode::End;
 
 	do{
+		int width = 1, height = 1, numMine = 0;
+
 		cout << "width:";
-		cin >> width;
+		cin  >>  width;
 
 		cout << "height:";
-		cin >> height;
+		cin  >>  height;
 
 		cout << "numMine:";
-		cin >> numMine;
+		cin  >>  numMine;
 
 		bourd = new Bourd(numMine, width, height);
 
 		do{
+			int startPlace = 11;
+
 			cout << "startPlase(WidthHeight)(example 56):";
-			cin >> place;
+			cin  >> startPlace;
 
-			toWidthAndHeight(place, &width, &height);
+			bourd -> putMine(place);
 
-			bourd -> putMine(width, height);
-
-			while(!(bourd -> getClear())){
+			while(!(bourd -> isClear())){
 				bourd -> show();
 
-				cout << "plase(example 04):";
-				cin >> place;
+				cout << "plase(example 14):";
+				cin  >> place;
 
-				toWidthAndHeight(place, &width, &height);
-
-				bourd -> open(width, height, true);
+				bourd -> open(place, true);
 			}
 
 			do{
+				int buf = 3;
+
 				cout << "Do you continue?(0:end, 1:continue, 2:reset):" ;
-				cin >> buf;
-				gameMode = toGameMode(buf);	
-			}while(gameMode == NOGAME);
+				cin  >> buf;
+				gameMode = GameMode::toGameMode(buf);
 
-		}while(gameMode == CONTINUE);
-	}while(gameMode == RESET);
+			}while(gameMode == GameMode::Null);
+		}while(gameMode == GameMode::Continue);
+
+		delete bourd;
+
+	}while(gameMode == GameMode::Reset);
+
 	return 0;
-}
-
-GameMode toGameMode(int buf){
-	switch(buf){
-	case 0:
-		return END;
-	case 1:
-		return CONTINUE;
-	case 2:
-		return RESET;
-	default:
-		return NOGAME;
-	}
-}
-
-void toWidthAndHeight(int place, int *width, int *height){
-	*height = place % 10;
-	*width = place / 10;
 }

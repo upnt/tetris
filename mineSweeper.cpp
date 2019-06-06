@@ -3,8 +3,6 @@
 
 int main(){
 	Bourd* bourd;
-	int place;
-	int buf;
 	GameMode gameMode = GameMode::End;
 
 	do{
@@ -23,19 +21,25 @@ int main(){
 
 		do{
 			int startPlace = 11;
+			do{
 
-			cout << "startPlase(WidthHeight)(example 56):";
-			cin  >> startPlace;
+				cout << "startPlase(WidthHeight)(example 56):";
+				cin  >> startPlace;
 
-			bourd -> putMine(place);
+			}while(!(11 <= startPlace));
+
+			bourd -> putMine(startPlace);
 
 			while(!(bourd -> isClear())){
-				bourd -> show();
+				int place = 11;
+				do{
+					bourd -> show();
 
-				cout << "plase(example 14):";
-				cin  >> place;
+					cout << "plase(example 14):";
+					cin  >> place;
 
-				bourd -> open(place, true);
+					bourd -> open(place, true);
+				}while(!(11 <= place));
 			}
 
 			do{

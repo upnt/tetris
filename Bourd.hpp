@@ -16,10 +16,8 @@ public:
 	bool isClear();
 
 	void putMine(int);
-	void putMine(int, int);
 
 	void open(int, bool);
-	void open(int, int, bool);
 
 	void show();
 
@@ -32,9 +30,10 @@ private:
 	int  height;
 
 	vector<shared_ptr<Panel>> panels;
-
-	void vecInit(int);
 	
+	void putMine(int, int);
+	void open(int, int, bool);
+
 	int  toVecId			(			int  width, int  height);
 	void toWidthAndHeight	(int place, int* width, int* height);
 

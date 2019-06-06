@@ -1,6 +1,6 @@
 CC := g++
 CFLAGS := -O2
-LDLIBS := -lncurses
+LDLIBS := -Incurses
 
 mineSweeper: mineSweeper.o Bourd.o Panel.o GameMode.o
 
